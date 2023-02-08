@@ -1,3 +1,3 @@
 0 search/1 SCHOOL School
-!:mime School
-!:strength + 255
+!:mime data/School
+!:strength * 255
