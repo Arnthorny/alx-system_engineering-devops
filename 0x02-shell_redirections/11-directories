@@ -1,2 +1,2 @@
 #!/bin/bash
-echo $((`ls -lRa | grep -c total` - 1))
+find ./* -type d | wc -l
