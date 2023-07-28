@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+#This script displays content of a directory with filename shown after first dash
+
+for file in "$PWD"/*
+do
+	base=$(basename "$file")
+	echo "${base#*-}"
+done

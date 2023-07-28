@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+#This script displays the content of the file /etc/passwd, using while loop + IFS
+
+IFS=":"
+while read -r USERNAME PASSWORD USERID GROUP_ID UINFO HOME_DIRECTORY CMD
+do
+	echo "The user $USERNAME is part of the $GROUP_ID gang, lives in $HOME_DIRECTORY and rides $CMD. $USERID's place is protected by the passcode $PASSWORD, more info about the user here: $UINFO"
+done < /etc/passwd
