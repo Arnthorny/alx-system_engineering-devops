@@ -26,7 +26,7 @@ awk 'NR==FNR{
 {
 	if ($1$9 in tmp_arr == 0)
 	{
-		print arr[$1$9]
+		print "    "arr[$1$9]
 		tmp_arr[$1$9]=1
 	}
 }' apache-access.log apache-access.log | sort -nr
