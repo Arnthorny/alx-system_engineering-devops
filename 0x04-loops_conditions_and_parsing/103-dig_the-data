@@ -1,32 +1,4 @@
 #!/usr/bin/env bash
 # This script parses apache log files and sorts data based on ip and status code
-#+ The first block is executed as awk goes through the files
-#+ Inside the first bock, the if-else block is used to populate the associative array
-#+ with the "IP+STATUS_CODE" as keys to index the associative array
-#+ The if block checks if a given key exists. If it does split the value of that key into three elements,
-#+ increment the first element and store the concatenated value of all three elements back at the
-#+ specified key of the array
-#+ If the key does not exist, initialize its value to a concatenated string of "1", "IP" and "STATUS CODE".
-#+ The equality check 'NR==FNR' is only valid for first file 
-#+ and so only block 1 is executed in first file
-#+ The 'next' keyword skips the 2nd block for 1st file and so the 2nd block executes for 2nd file
-#+ The associatobe array persists on both passes.
 
-awk 'NR==FNR{
-	if ($1$9 in arr)
-	{
-		split(arr[$1$9], tmp)
-		tmp[1]++
-		arr[$1$9] = tmp[1]" "tmp[2]" "tmp[3]
-	}
-	else
-		arr[$1$9]=1" "$1" "$9
-	next
-}
-{
-	if ($1$9 in tmp_arr == 0)
-	{
-		print "    "arr[$1$9]
-		tmp_arr[$1$9]=1
-	}
-}' apache-access.log apache-access.log | sort -nr
+awk '{print $1, $9}' apache-access.log | sort | uniq -c |sort -nr
