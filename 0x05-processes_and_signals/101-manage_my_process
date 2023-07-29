@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# Bash (init) script 101-manage_my_process that manages manage_my_process
+
+
+if [[ $# -ne 1 || $1 != "start" && $1 != "restart" && $1 != "stop" ]]
+then
+	echo "Usage: manage_my_process {start|stop|restart}"
+	exit
+fi
+
+daemon="manage_my_process"
+pidfile="/var/run/my_process.pid"
+
+start ()
+{
+	./$daemon &
+	echo $! > "$pidfile"
+}
+
+stop ()
+{
+	kill "$(cat $pidfile)"
+	rm -rf "$pidfile"
+}
+
+case $1 in
+	"start")
+		start
+		echo "manage_my_process started";;
+	"restart")
+		stop
+		start
+		echo "manage_my_process restarted";;
+	"stop")
+		stop
+		echo "manage_my_process stopped";;
+	#*)
+	#	echo "Usage: manage_my_process {start|stop|restart}"
+	#	exit
+
+esac
