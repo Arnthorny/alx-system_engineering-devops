@@ -7,9 +7,12 @@
 #+ increment the first element and store the concatenated value of all three elements back at the
 #+ specified key of the array
 #+ If the key does not exist, initialize its value to a concatenated string of "1", "IP" and "STATUS CODE".
-#+ The END block prints the array once awk reads through the entire file.
+#+ The equality check 'NR==FNR' is only valid for first file 
+#+ and so only block 1 is executed in first file
+#+ The 'next' keyword skips the 2nd block for 1st file and so the 2nd block executes for 2nd file
+#+ The associatobe array persists on both passes.
 
-awk '{
+awk 'NR==FNR{
 	if ($1$9 in arr)
 	{
 		split(arr[$1$9], tmp)
@@ -18,9 +21,12 @@ awk '{
 	}
 	else
 		arr[$1$9]=1" "$1" "$9
+	next
 }
-
-END {
-  for (var in arr)
-    print "    " arr[var]
-}' apache-access.log | sort -nr 
+{
+	if ($1$9 in tmp_arr == 0)
+	{
+		print arr[$1$9]
+		tmp_arr[$1$9]=1
+	}
+}' apache-access.log apache-access.log | sort -nr
