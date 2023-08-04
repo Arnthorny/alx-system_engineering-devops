@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# Bash script that configures an Ubuntu server with the below requirements:
+#+ localhost resolves to 127.0.0.2
+#+ facebook.com resolves to 8.8.8.8.
+
+backup=~/hosts.bak
+cp /etc/hosts "$backup"
+
+if grep -q "localhost" "$backup"
+then
+	sed -i 's/^.*\slocalhost\s*$/127.0.0.2\tlocalhost/' "$backup"
+else
+	echo $'127.0.0.2\tlocalhost' >> "$backup"
+fi
+
+
+if grep -q "facebook\.com" "$backup"
+then
+	sed -i 's/^.*\sfacebook\.com\s*$/8.8.8.8\tfacebook.com/' "$backup"
+else
+	echo $'8.8.8.8\tfacebook.com' >> "$backup"
+fi
+
+cp -f "$backup" /etc/hosts
