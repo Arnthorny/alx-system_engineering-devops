@@ -1,15 +1,17 @@
-# create a manifest that kills a process named killmenow
+#  SSH configuration file so that you can connect to a server without password
 
-$file = '/etc/ssh/sshd_config'
+include stdlib
+
+$file = '/etc/ssh/ssh_config'
 
 file_line { 'Turn off passwd auth':
-  ensure => 'present',
+  ensure => present,
   path   => $file,
-  line   => 'BatchMode yes'
+  line   => 'PasswordAuthentication no'
 }
 
 file_line { 'Declare identity file':
-  ensure => 'present',
+  ensure => present,
   path   => $file,
   line   => 'IdentityFile ~/.ssh/school'
 }
