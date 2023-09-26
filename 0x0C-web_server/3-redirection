@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Configure your Nginx server so that /redirect_me is redirecting to another page.
+# This script uses `sed` to replace the closing brace in the config file
+# with the required directive and another closng brace
+# printf could also be used to construct a new server {} context to replace the entire text in the config file. 
+# As printf supports multiline strings. E.g `printf %s "server {...}" > "$path_config"`.
+
+apt-get -y update
+apt-get -y install nginx
+
+
+if ! nginx -v
+then
+	exit
+fi
+
+# Create a default index html containing 'Hello world!'
+path_html="/var/www/html/index.html"
+echo "Hello World!" > "$path_html"
+
+
+# Add a redirection directive to the configuration file for the page '/redirect_me'
+path_config="/etc/nginx/sites-available/default"
+text="\tlocation \/redirect_me {\n\t\treturn 301 https:\/\/www.youtube.com\/watch\?v=QH2-TGUlwu4;\n\t}\n}"
+
+sed -i -r "s/^}$/$text/" "$path_config"
+
+service nginx restart
