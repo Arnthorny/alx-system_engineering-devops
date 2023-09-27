@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Bash script to get Apache to run on the container and to return a page containing Hello Holberton when querying the root of it
+# This error occured as there was no global `ServerName` directive,
+# which is used by Apache to map incoming http request to an IP address or DNS hostname
+# It is corrected by setting this directive to the localhost ip address
+
+echo "ServerName 127.0.0.1" >> /etc/apache2/apache2.conf
+
+service apache2 restart
