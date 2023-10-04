@@ -13,10 +13,10 @@ then
 fi
 
 
-repl_dir="\t\tadd_header X-Served-By \$hostname;\n\t}"
+repl_dir="\n\tadd_header X-Served-By \$hostname;\n"
 path_config="/etc/nginx/sites-available/default"
 
 #This sed command only replaces the first occurence of a tabbed right brace
-sed -i -r "0,/^\t}$/{s//$repl_dir/}" $path_config
+sed -i -r "s/^(\tserver_name _;)$/\1$repl_dir/" $path_config
 
 service nginx restart

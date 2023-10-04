@@ -3,7 +3,7 @@
 
 include stdlib
 
-$repl_dir="\t\tadd_header X-Served-By \$hostname;\n\t}"
+$repl_dir="\tadd_header X-Served-By \$hostname;\n"
 $config_file = '/etc/nginx/sites-available/default'
 
 
@@ -30,7 +30,7 @@ file_line { 'Custom header':
   ensure   => present,
   path     => $config_file,
   line     => $repl_dir,
-  match    => "^\t}$",
+  after    => "\tserver_name _;",
   multiple => false,
   require  => Package['nginx'],
   notify   => Service['nginx']

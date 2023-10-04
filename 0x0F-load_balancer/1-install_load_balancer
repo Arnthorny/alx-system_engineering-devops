@@ -3,9 +3,10 @@
 # Distribute requests using a roundrobin algorithm
 # Make sure that HAproxy can be managed via an init script
 
+apt-get -y install --no-install-recommends software-properties-common
+add-apt-repository -y ppa:vbernat/haproxy-2.8
 apt-get -y update
-apt-get -y install haproxy
-
+apt-get -y install haproxy=2.8.\*
 
 if ! haproxy -v
 then
@@ -22,15 +23,17 @@ cp "$path_cfg" "$path_cfg.orig"
 echo "ENABLED=1" >> "$path_def_config"
 
 # Add configuration to haproxy.cfg file
-printf %s "frontend web_frontend
+printf %s "
+frontend web_frontend
 	bind			*:80
 	mode			tcp
-	default_backend	www_hexdev
+	default_backend		www_hexdev
 
 backend www_hexdev
 	balance			roundrobin
 	mode			tcp
 	server			web-01 18.206.206.50:80 check
-	server			web-02 35.175.104.89:80 check" >> "$path_cfg"
+	server			web-02 35.175.104.89:80 check
+" >> "$path_cfg"
 
 service haproxy restart
