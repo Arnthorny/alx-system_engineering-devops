@@ -4,9 +4,9 @@
 # Make sure that HAproxy can be managed via an init script
 
 apt-get -y install --no-install-recommends software-properties-common
-add-apt-repository -y ppa:vbernat/haproxy-2.8
+add-apt-repository -y ppa:vbernat/haproxy-2.0
 apt-get -y update
-apt-get -y install haproxy=2.8.\*
+apt-get -y install haproxy=2.0.\*
 
 if ! haproxy -v
 then
@@ -27,7 +27,8 @@ printf %s "
 frontend web_frontend
 	bind			*:80
 	mode			tcp
-	default_backend		www_hexdev
+    option          tcplog
+	default_backend www_hexdev
 
 backend www_hexdev
 	balance			roundrobin
