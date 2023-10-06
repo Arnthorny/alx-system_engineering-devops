@@ -42,12 +42,12 @@ frontend http_frontend
 
 frontend https_frontend
 	bind 			*:443 ssl crt /etc/haproxy/certs/www.hexdev.tech.pem
-	mode			tcp
-	option			tcplog
+	mode			http
+	option			httplog
 	default_backend	www_hexdev
 	
 backend www_hexdev
 	balance			roundrobin
-	mode			tcp
+	mode			http
 	server			web-01 18.206.206.50:80 check
 	server			web-02 35.175.104.89:80 check
