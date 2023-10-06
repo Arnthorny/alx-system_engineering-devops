@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# Bash script that will display information about subdomains.
+
+
+arr_subs=("www" "lb-01" "web-01" "web-02")
+
+gen_op ()
+{
+	local res sub rec_type dest_ip
+	res="$(dig "$2"."$1" | grep -A1 'ANSWER SECTION:' | tail -1)"
+	sub="$2"
+	rec_type="$(echo "$res" | awk '{print $4}')"
+	dest_ip="$(echo "$res" | awk '{print $5}')"
+	echo "The subdomain $sub is a $rec_type record and points to $dest_ip"
+}
+
+if [[ $# -eq 1 ]]
+then
+	for sub in "${arr_subs[@]}"
+	do
+		gen_op "$1" "$sub"
+	done
+elif [[ $# -ge 2 ]]
+then
+	gen_op "$1" "$2"
+fi
