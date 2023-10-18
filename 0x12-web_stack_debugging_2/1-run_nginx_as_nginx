@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Run Nginx as Nginx
+
+# CHange user in nginx config file
+sed -i -E '1s/^# user.*$/user nginx;/' /etc/nginx/nginx.conf
+
+# nginx must be listening on all active IPs on port 8080
+sed -i 's/80/8080/' /etc/nginx/sites-enabled/default
+
+# Store PID for apache server
+pgrep apache2 | head -1 > /var/run/apache2/apache2.pid
+
+# Kill apache web server
+service apache2 stop
+
+# Restart nginx server as nginx user
+su -c 'service nginx restart' nginx
