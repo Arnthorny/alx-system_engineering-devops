@@ -40,7 +40,8 @@ def main():
     total = len(emp_todos)
     print(f'Employee {u_json.get("name")} is done with tasks({done}/{total}):')
     for todo in emp_todos:
-        print(f'\t {todo.get("title")}')
+        if todo.get('completed'):
+            print(f'\t {todo.get("title")}')
 
 
 if __name__ == "__main__":
