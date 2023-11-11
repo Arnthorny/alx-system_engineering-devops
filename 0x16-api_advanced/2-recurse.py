@@ -16,7 +16,7 @@ def recurse(subreddit, hot_list=[], aft=None):
     Args:
         subreddit(`str`): Name of subreddit
         hot_list(`list`): List to be populated
-        aft(`str`): Token for pagination. Initiaally None
+        aft(`str`): Token for pagination. Initially None
     Return:
         List of posts else None if invalid subreddit.
     """
@@ -26,7 +26,7 @@ def recurse(subreddit, hot_list=[], aft=None):
 
     r = requests.get(url, headers=header, allow_redirects=False, params=param)
     if 'application/json' not in r.headers.get('Content-Type', ''):
-        return
+        return None
     res_json = r.json()
 
     aft = res_json.get('data', {}).get('after')

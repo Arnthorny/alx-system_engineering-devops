@@ -24,11 +24,13 @@ def top_ten(subreddit):
     r = requests.get(url, headers=header, allow_redirects=False)
     if 'application/json' not in r.headers.get('Content-Type', ''):
         print(None)
+        return
     res_json = r.json()
 
     r_data_child = res_json.get('data', {}).get('children')
     if not r_data_child:
         print(None)
+        return
     # Incase returned list has less than 10 posts
     num_to_print = min(10, len(r_data_child))
 
