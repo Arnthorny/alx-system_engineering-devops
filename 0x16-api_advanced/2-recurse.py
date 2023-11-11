@@ -22,18 +22,17 @@ def recurse(subreddit, hot_list=[], aft=None):
     """
     url = 'https://www.reddit.com/r/{}/hot.json'.format(subreddit)
     header = {'User-Agent': 'el-Ynot/1.0 (Linux)'}
-    param = {'after': aft}
+    param = {'after': aft, 'limit': 100}
 
     r = requests.get(url, headers=header, allow_redirects=False, params=param)
-    if 'application/json' not in r.headers.get('Content-Type', ''):
+    if r.status_code != 200:
         return None
     res_json = r.json()
 
     aft = res_json.get('data', {}).get('after')
     r_data_child = res_json.get('data', {}).get('children')
-
     if not r_data_child:
-        return None
+        r_data_child = []
 
     all_titl = list(map(lambda x: x.get('data', {}).get('title'),
                     r_data_child))

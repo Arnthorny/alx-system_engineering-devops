@@ -20,19 +20,15 @@ def top_ten(subreddit):
     """
     url = 'https://www.reddit.com/r/{}/hot.json'.format(subreddit)
     header = {'User-Agent': 'el-Ynot/1.0 (Linux)'}
+    param = {'limit': 10}
 
-    r = requests.get(url, headers=header, allow_redirects=False)
-    if 'application/json' not in r.headers.get('Content-Type', ''):
+    r = requests.get(url, headers=header, allow_redirects=False, params=param)
+    if r.status_code != 200:
         print(None)
         return
     res_json = r.json()
 
     r_data_child = res_json.get('data', {}).get('children')
-    if not r_data_child:
-        print(None)
-        return
-    # Incase returned list has less than 10 posts
-    num_to_print = min(10, len(r_data_child))
 
-    for i in range(num_to_print):
-        print(r_data_child[i].get('data', {}).get('title'))
+    for child in r_data_child[0:10]:
+        print(child.get('data', {}).get('title'))

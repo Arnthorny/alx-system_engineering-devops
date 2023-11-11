@@ -48,6 +48,7 @@ def count_words(subreddit, word_list, hot_list=[], aft=None):
     param = {'after': aft}
 
     r = requests.get(url, headers=header, allow_redirects=False, params=param)
+    # Use status code to reduce verbose checks
     if 'application/json' not in r.headers.get('Content-Type', ''):
         return
     res_json = r.json()
