@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+MAINPID=$(sudo systemctl show --property MainPID --value gunicorn)
+kill -HUP "$MAINPID"
