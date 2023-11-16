@@ -49,10 +49,12 @@ server {
 	location / {
 		proxy_pass http://127.0.0.1:5003/2-hbnb;
 		proxy_set_header Host $http_host;
+		proxy_redirect off;
 	}
 	
 	location /static/ {
 		alias /home/ubuntu/AirBnB_clone_v4/web_dynamic/static/;
+		proxy_redirect off;
 	}
 
 	# 404 page
