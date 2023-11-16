@@ -46,19 +46,35 @@ server {
 	server_name _;
 	add_header X-Served-By $hostname;
 
-	location = / {
-		# rewrite root to 2-hbnb
-		rewrite ^ /2-hbnb last;
+	location / {
+		proxy_pass http://127.0.0.1:5003/2-hbnb;
+		proxy_set_header Host $http_host;
 	}
 	
-	location / {
-		# First attempt to serve request as file, then
-		# as directory, then fall back to displaying a 404.
-		# try_files $uri $uri/ =404;
-		proxy_pass http://127.0.0.1:5003;
+	location /static/ {
+		alias /home/ubuntu/AirBnB_clone_v4/web_dynamic/static/;
+	}
+
+	# 404 page
+	error_page 404 /error-404.html;
+	location /error-404.html {
+		internal;
+	}
+
+	location = /airbnb-onepage/ {
+		proxy_pass http://127.0.0.1:5000;
 		proxy_set_header Host $http_host;
 		proxy_set_header X-Forwarded-Proto $scheme;
-		# add_header Access-Control-Allow-Origin * always;
+	}
+	location /airbnb-dynamic/number_odd_or_even/ {
+		proxy_pass http://127.0.0.1:5001/number_odd_or_even/;
+		proxy_set_header Host $http_host;
+		proxy_set_header X-Forwarded-Proto $scheme;
+	}
+	location /api/ {
+		proxy_pass http://127.0.0.1:5002;
+		proxy_set_header Host $http_host;
+		proxy_set_header X-Forwarded-Proto $scheme;
 	}
 
 	# pass PHP scripts to FastCGI server
@@ -81,28 +97,8 @@ server {
 	location /redirect_me {
 		return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
 	}
-
-	error_page 404 /error-404.html;
-	location /error-404.html {
-		internal;
-	}
 	location /hbnb_static {
 		alias /data/web_static/current/;
-	}
-	location = /airbnb-onepage/ {
-		proxy_pass http://127.0.0.1:5000;
-		proxy_set_header Host $http_host;
-		proxy_set_header X-Forwarded-Proto $scheme;
-	}
-	location /airbnb-dynamic/number_odd_or_even/ {
-		proxy_pass http://127.0.0.1:5001/number_odd_or_even/;
-		proxy_set_header Host $http_host;
-		proxy_set_header X-Forwarded-Proto $scheme;
-	}
-	location /api/ {
-		proxy_pass http://127.0.0.1:5002;
-		proxy_set_header Host $http_host;
-		proxy_set_header X-Forwarded-Proto $scheme;
 	}
 }
 
@@ -122,6 +118,9 @@ server {
 #	index index.html;
 #
 #	location / {
+		# First attempt to serve request as file, then
+		# as directory, then fall back to displaying a 404.
+		# try_files $uri $uri/ =404;
 #		try_files $uri $uri/ =404;
 #	}
 #}
