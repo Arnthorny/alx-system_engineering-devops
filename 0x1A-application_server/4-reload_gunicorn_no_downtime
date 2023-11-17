@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
+#Reload Gunicorn gracefully(No downtime)
 MAINPID=$(sudo systemctl show --property MainPID --value gunicorn)
 kill -HUP "$MAINPID"
