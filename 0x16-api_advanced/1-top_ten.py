@@ -19,16 +19,19 @@ def top_ten(subreddit):
         Top ten posts else None if invalid subreddit.
     """
     url = 'https://www.reddit.com/r/{}/hot.json'.format(subreddit)
-    header = {'User-Agent': 'el-Ynot/1.0 (Linux)'}
+    header = {'User-Agent': 'el-not/2.0 (Liinux)'}
     param = {'limit': 10}
 
     r = requests.get(url, headers=header, allow_redirects=False, params=param)
     if r.status_code != 200:
         print(None)
-        return
-    res_json = r.json()
+    else:
+        res_json = r.json()
 
-    r_data_child = res_json.get('data', {}).get('children')
+        r_data_child = res_json.get('data', {}).get('children')
 
-    for child in r_data_child[0:10]:
-        print(child.get('data', {}).get('title'))
+        if r_data_child and type(r_data_child) == list:
+            for child in r_data_child[:10]:
+                print(child.get('data', {}).get('title'))
+        else:
+            print(None)
